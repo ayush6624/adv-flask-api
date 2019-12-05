@@ -11,3 +11,15 @@ Website - https://app.goyal.club
 - [ ] Build a key based authentication system using JWT token for accessing the api functionality.
 - [ ] Put in place a throttle for api call rate, let's say 5 / min.
 
+## Docker Container Setup
+The app can be built and run as a Docker container:
+```bash
+docker build -t flask-api .
+docker run -d -p 5000:5000 --name api flask-api
+```
+
+## Local Installation Setup
+```bash
+pip3 install -r requirements.txt
+python3 app.py
+``
