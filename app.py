@@ -1,10 +1,21 @@
 from flask import Flask, render_template, request, jsonify
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["5 per minute"]
+)
 
 
 @app.route('/')
+@limiter.exempt
 def index():
+    '''
+    Returns the home page of the app. Rate limiting is exempted here
+    '''
     return render_template('index.html')
 
 
