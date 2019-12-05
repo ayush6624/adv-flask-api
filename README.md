@@ -1,4 +1,5 @@
-# Flask API Project
+# Flask API Project   
+[![Build Status](https://travis-ci.com/ayush6624/adv-flask-api.svg?branch=master)](https://travis-ci.com/ayush6624/adv-flask-api)   
 
 Website - https://app.goyal.club
 
