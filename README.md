@@ -7,9 +7,9 @@ Website - https://app.goyal.club
 
 ## Build a flask API 
 - [x] A basic 2 page interface
-- [ ] Simple interface to upload images and when you click "submit" button, it shows a new page with name of the uploaded image.
-- [ ] Build a key based authentication system using JWT token for accessing the api functionality.
-- [ ] Put in place a throttle for api call rate, let's say 5 / min.
+- [ ] API & interface to upload images and when you click "submit" button, it shows a new page with name of the uploaded image.
+- [x] Build a key based authentication system using JWT token for accessing the api functionality.
+- [x] Put in place a throttle for api call rate, let's say 5 / min.
 
 ## Docker Container Setup
 The app can be built and run as a Docker container:
@@ -22,4 +22,4 @@ docker run -d -p 5000:5000 --name api flask-api
 ```bash
 pip3 install -r requirements.txt
 python3 app.py
-``
+```
