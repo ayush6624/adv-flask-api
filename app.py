@@ -14,9 +14,11 @@ limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["5 per minute"]
 )
-app.config['JWT_SECRET_KEY'] = os.environ.get('SECRET')
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
+# app.config['JWT_SECRET_KEY'] = os.environ.get('SECRET')
+app.config['JWT_SECRET_KEY'] = 'ayushgoyal'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
-app.secret_key = os.environ.get("FLASK_SECRET_KEY")  # Use Env variable
+app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 mongo = pymongo.MongoClient(os.environ.get("MONGO_URI"))
 jwt = JWTManager(app)
 
@@ -51,7 +53,6 @@ def upload():
 
 
 @app.route('/user', methods=['GET', 'POST'])
-@jwt_required
 def user():
     if request.method == 'GET':
         query = request.args
