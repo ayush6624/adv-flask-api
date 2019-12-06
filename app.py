@@ -7,6 +7,7 @@ import pymongo
 from flask_jwt_extended import (JWTManager, create_access_token,
                                 create_refresh_token, jwt_required,
                                 jwt_refresh_token_required, get_jwt_identity)
+# from bucket import client
 
 app = Flask(__name__)
 limiter = Limiter(
@@ -22,12 +23,6 @@ mongo = pymongo.MongoClient(os.environ.get("MONGO_URI"))
 jwt = JWTManager(app)
 
 
-@app.route('/secret')
-@jwt_required
-def sec():
-    return jsonify({"name": "ayush"})
-
-
 @app.route('/')
 @limiter.exempt
 def index():
@@ -37,37 +32,44 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('/upload', methods=['POST'])
 @jwt_required
-def upload():
+def apiUpload():
+    if request.method == 'POST':
+        if request.files:
+            upload_file = request.files['file']
+            file_name = upload_file.filename
+            return jsonify({"filename": file_name}), 201
+
+
+@app.route('/web/upload', methods=['POST'])
+def webUpload():
     if request.method == 'POST':
         if request.files:
             upload_file = request.files['customFile']
             file_name = upload_file.filename
-            print(request.headers['Content-Type'])
-            if request.headers['Content-Type'] == 'application/json':
-                return jsonify({"filename": file_name}, 201)
-            else:
-                return render_template('page.html', name=file_name), 201
+            return render_template('page.html', name=file_name), 201
 
 
 @app.route('/user', methods=['GET', 'POST'])
 @jwt_required
 def user():
-    if request.method == 'GET':
-        query = request.args
-        data = mongo.api.users.find_one(query)
-        if data:
-            return jsonify({"password": data['password']}), 200
-        else:
-            return jsonify({"error": "not found"}), 400
-
+    '''
+    New User- Send request in json format with username and password values
+    '''
     data = request.get_json()
     if request.method == 'POST':
         if data.get('username', None) and data.get('password', None):
-            mongo.api.users.insert_one(data)
-            return jsonify({'username': data['username'],
-                            'message': 'User created successfully!'}), 200
+            existing_user = mongo.api.users.find_one(
+                {'username': data['username']})
+            if existing_user is None:
+                mongo.api.users.insert_one(data)
+                return jsonify({'username': data['username'],
+                                'message': 'User created successfully!'}), 200
+            else:
+                return jsonify({'username': data['username'],
+                                'message': 'Already Exists!'}), 400
+
         else:
             return jsonify({'username': None,
                             'message': 'Bad request parameters!'}), 400
@@ -105,6 +107,11 @@ def refresh():
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({'error': 'Not Found'}), 404
+
+
+@app.errorhandler(500)
+def int_error(error):
+    return jsonify({'error': 'Not Allowed'}), 403
 
 
 @jwt.unauthorized_loader
