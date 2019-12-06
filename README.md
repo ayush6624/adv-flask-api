@@ -5,12 +5,14 @@ Website - https://app.goyal.club
 
 # Endpoints
 - `GET /` - Homepage of the application
-- `POST /upload` - The API endpoint for uploading a files via a client side application. This is protected by JWT Authentication and rate limited to 5 requests per minute
+- `POST /upload` - The API endpoint for uploading a files via a client side application. This is protected by JWT Authentication and rate limited to 5 requests per minute. File must be passed with the key as `file`
 - `POST /web/upload` - Endpoint for the Web Interface.
 - `POST /user` - Signing up as a new user by providing username and password values (need to be in json format)
 - `POST /auth` - Obtaining a JWT Token by providing username and password values (need to be in json format)
 - `POST /refresh` - Endpoint for getting a fresh token by providing the refresh token
 
+- This project uses flake8 guidelines.
+- The API is hosted using Zeit Now (Serverless Platform) on an AWS Lambda (ap-south-1 Mumbai region) Function and all assets are served using Amazon Cloudfront. I've used MongoDB as a database solution which is deployed on a 3 node cluster on an AWS ap-south-1 instance.
 
 # Objectives   
 
