@@ -52,7 +52,6 @@ def webUpload():
 
 
 @app.route('/user', methods=['GET', 'POST'])
-@jwt_required
 def user():
     '''
     New User- Send request in json format with username and password values
